@@ -1,31 +1,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../assets/logo.png';
+import RemainingDays from '../components/RemainingDays';
 
 
 function HomePage() {
     return (
     <div>
 
-        <div class="flex justify-center bg-pink-2 border rounded-lg m-6">
-            <div class="flex flex-col items-center w-1/4">
+        <div className="flex justify-center bg-pink-2 rounded-lg m-6 shadow-pink-800 shadow-md">
+            <div className="flex flex-col items-center w-2/4">
                 <img src={logo} alt="image logo" className="size-20"/>
-                <span className=" text-red-950 font-bold">
-                    Regulus
+                <span className=" text-red-950 font-bold text-xl p-2">
+                    Regulus Lumen
                 </span>
             </div>    
         </div>
 
-        <div class="flex flex-row m-4 justify-center">
+        <div className="flex flex-row m-4 justify-center">
             <nav>
-                <ul class="flex space-x-4">
-                    <li><Link to="/graph" class="bg-pink-2 border rounded-lg p-2">Graphiques</Link></li>
-                    <li><Link to="/settings" class="bg-pink-2 border rounded-lg p-2">Paramètres</Link></li>
+                <ul className="flex space-x-4 font-medium">
+                    <li><Link to="/graph" className=" rounded-lg p-2 shadow-pink-2 shadow-md">Graphiques</Link></li>
+                    <li><Link to="/settings" className=" rounded-lg p-2 shadow-pink-2 shadow-md">Paramètres</Link></li>
                 </ul>
             </nav>
         </div>
 
-    </div>    
+        <div className="m-6">
+            <RemainingDays />
+        </div>
+
+            <p>jour 1</p>
+            <p>dernier jour</p>
+            <p>calendrier</p>
+
+    </div>
+
+
+    
+
     );
 }
 
