@@ -10,8 +10,8 @@ function RemainingDays({ lastPeriodDate, cycleLength }) {
     // Effect hook pour appeler l'API Django au chargement du composant
     useEffect(() => {
         const url = inputDate 
-            ? `http://localhost:8000/api/remaining_days/?start_date=${inputDate}`
-            : 'http://localhost:8000/api/remaining_days/';
+            ? `http://localhost:8000/api/get_remaining_days/?start_date=${inputDate}`
+            : 'http://localhost:8000/api/get_remaining_days/';
 
             console.log("Requête envoyée à l'URL :", url); 
             axios.get(url)
@@ -26,23 +26,13 @@ function RemainingDays({ lastPeriodDate, cycleLength }) {
 
     return (
         <div className="remaining-days">
-            <p className="font-semibold">Jours restants avant la règle :</p>
+            <p className="font-bold">Jours restants avant les prochaines règles :</p>
             {daysRemaining !== null ? (
                 <p className="text-gray-700">{daysRemaining} jours</p>
             ) : (
                 <p className="text-gray-700">Chargement...</p>
             )}
             <p className="text-sm text-gray-500">Cycle moyen : {localCycleLength} jours</p>
-            <div>
-                <label htmlFor="lastPeriodDate">Date du début des dernières règles :</label>
-                <input
-                    type="date"
-                    id="lastPeriodDate"
-                    value={inputDate}
-                    onChange={(e) => setInputDate(e.target.value)}
-                    className="border rounded p-1 mt-2"
-                />
-            </div>
         </div>
     );
 }

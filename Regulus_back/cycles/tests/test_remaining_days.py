@@ -6,7 +6,7 @@ from cycles.models import Cycle
 
 @pytest.mark.django_db
 def test_remaining_days_with_user_input(client):
-    url = reverse('remaining_days')
+    url = reverse('get_remaining_days')
     response = client.get(f"{url}?start_date=2025-01-01")
     
     assert response.status_code == 200
@@ -19,7 +19,7 @@ def test_remaining_days_with_cycle_data(client):
     """
     Simuler un appel API pour récupérer les jours restants avec une date d'entrée
     """
-    url = reverse('remaining_days')
+    url = reverse('get_remaining_days')
     
     response = client.get(f"{url}?start_date=2024-01-01")
     assert response.status_code == 200
@@ -41,7 +41,7 @@ def test_remaining_days_without_cycle_data(client):
     # Supprimer tous les cycles existants
     Cycle.objects.all().delete()
 
-    url = reverse('remaining_days')
+    url = reverse('get_remaining_days')
     
     response = client.get(f"{url}?start_date=2024-01-01")
     assert response.status_code == 200
@@ -61,7 +61,7 @@ def test_remaining_days_with_multiple_cycles(client):
     cycle2 = Cycle.objects.create(start_date=date(2024, 2, 1), end_date=date(2024, 2, 28))
     cycle3 = Cycle.objects.create(start_date=date(2024, 3, 1), end_date=date(2024, 3, 28))
     
-    url = reverse('remaining_days')
+    url = reverse('get_remaining_days')
     response = client.get(f"{url}?start_date=2024-01-01")
     assert response.status_code == 200
     
@@ -82,6 +82,6 @@ def test_remaining_days_with_recorded_cycles(client):
     Cycle.objects.create(start_date=date(2024, 1, 1), end_date=date(2024, 1, 28))
     Cycle.objects.create(start_date=date(2024, 2, 1), end_date=date(2024, 2, 28))
     
-    url = reverse('remaining_days')
+    url = reverse('get_remaining_days')
     response = client.get(url)
     assert response.status_code == 200
