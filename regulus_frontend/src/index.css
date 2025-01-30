@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+
 body {
 background-color: white;
+}
+
+.highlighted {
+    background-color: #ff99cc !important;
+    border-radius: 50%;
+}
+
+/* Cercle pour afficher au centre des jours marqués */
+.circle-highlight {
+    width: 10px;
+    height: 10px;
+    background-color: #ff66b2;
+    border-radius: 50%;
+    margin: auto;
 }

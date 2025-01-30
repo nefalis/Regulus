@@ -13,7 +13,6 @@ function RemainingDays({ lastPeriodDate, cycleLength }) {
             ? `http://localhost:8000/api/get_remaining_days/?start_date=${inputDate}`
             : 'http://localhost:8000/api/get_remaining_days/';
 
-            console.log("Requête envoyée à l'URL :", url); 
             axios.get(url)
             .then(response => {
                 setDaysRemaining(response.data.days_remaining);
@@ -26,11 +25,11 @@ function RemainingDays({ lastPeriodDate, cycleLength }) {
 
     return (
         <div className="remaining-days">
-            <p className="font-bold">Jours restants avant les prochaines règles :</p>
+            <p className="font-bold text-xl">Jours restants avant les prochaines règles :</p>
             {daysRemaining !== null ? (
-                <p className="text-gray-700">{daysRemaining} jours</p>
+                <p className="text-xl">{daysRemaining} jours</p>
             ) : (
-                <p className="text-gray-700">Chargement...</p>
+                <p className="text-xl">{localCycleLength} jours</p>
             )}
             <p className="text-sm text-gray-500">Cycle moyen : {localCycleLength} jours</p>
         </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+
 import logo from '../assets/logo.png';
 import RemainingDays from '../components/RemainingDays';
 import AddCycle from '../components/AddCycle';
@@ -22,26 +23,22 @@ function HomePage() {
         <div className="flex flex-row m-4 justify-center">
             <nav>
                 <ul className="flex space-x-4 font-medium">
-                    <li><Link to="/graph" className=" rounded-lg p-2 bg-pink-1 shadow-pink-2 shadow-md">Graphiques</Link></li>
+                    <li><Link to="/graph" className=" rounded-lg p-2  bg-pink-1 shadow-pink-2 shadow-md">Graphiques</Link></li>
                     <li><Link to="/settings" className=" rounded-lg p-2 bg-pink-1 shadow-pink-2 shadow-md">Paramètres</Link></li>
                 </ul>
             </nav>
         </div>
 
-        <div className="m-6">
+        <div className="m-6 rounded-lg p-2 bg-pink-1 shadow-pink-2 shadow-md">
             <RemainingDays />
         </div>
 
-        <div>
+        <div className="m-6 rounded-lg p-2 bg-pink-1 shadow-pink-2 shadow-md">
             <AddCycle/>
-        </div>    
-            <p>dernier jour</p>
-            <p>calendrier</p>
+        </div>   
+
 
     </div>
-
-
-    
 
     );
 }

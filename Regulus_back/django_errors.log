@@ -1,0 +1,8 @@
+Internal Server Error: /api/get_remaining_days/
+Internal Server Error: /api/get_remaining_days/
+"GET /api/get_remaining_days/ HTTP/1.1" 500 104
+"GET /api/get_remaining_days/ HTTP/1.1" 500 104
+Internal Server Error: /api/get_remaining_days/
+"GET /api/get_remaining_days/ HTTP/1.1" 500 104
+Internal Server Error: /api/get_remaining_days/
+"GET /api/get_remaining_days/ HTTP/1.1" 500 104

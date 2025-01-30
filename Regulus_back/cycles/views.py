@@ -70,6 +70,7 @@ def add_cycle(request):
             # Charger les données JSON envoyées par le frontend
             data = json.loads(request.body)
             start_date_str = data.get('start_date')
+            end_date_str = data.get('end_date')
 
             if not start_date_str:
                 return JsonResponse({'error': 'La date de début est requise.'}, status=400)
@@ -77,17 +78,24 @@ def add_cycle(request):
             # Convertir la date en objet datetime
             start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date()
 
+            # Si aucune date de fin n'est fournie, définir une date de fin par défaut (7 jours après le début)
+            if not end_date_str:
+                end_date = start_date + timedelta(days=7)
+            else:
+                end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date()
+
             # Vérifier si un cycle existe déjà pour cette date
             if Cycle.objects.filter(start_date=start_date).exists():
                 return JsonResponse({'error': 'Un cycle pour cette date existe déjà.'}, status=400)
 
             # Créer un nouveau cycle
-            cycle = Cycle(start_date=start_date, end_date=start_date + timedelta(days=28))
+            cycle = Cycle(start_date=start_date, end_date=end_date)
             cycle.save()
 
             return JsonResponse({
                 'message': 'Cycle ajouté avec succès !',
-                'start_date': start_date.isoformat()
+                'start_date': start_date.isoformat(),
+                'end_date': end_date.isoformat()
             }, status=201)
 
         except ValueError:
@@ -97,3 +105,23 @@ def add_cycle(request):
             return JsonResponse({'error': f"Erreur serveur : {str(e)}"}, status=500)
     else:
         return JsonResponse({'error': 'Méthode non autorisée.'}, status=405)
+
+
+@csrf_exempt
+def delete_cycle(request, cycle_id):
+    if request.method == 'DELETE':
+        try:
+            cycle = Cycle.objects.get(id=cycle_id)
+            cycle.delete()
+
+            # Retourne un message de succès avec un code 200 (OK)
+            return JsonResponse({'message': 'Cycle supprimé avec succès'}, status=200)
+
+        except Cycle.DoesNotExist:
+            return JsonResponse({'error': 'Cycle non trouvé'}, status=404)
+
+        except Exception as e:
+            print(f"Erreur serveur : {str(e)}")
+            return JsonResponse({'error': f"Erreur serveur : {str(e)}"}, status=500)
+
+    return JsonResponse({'error': 'Méthode non autorisée'}, status=405)

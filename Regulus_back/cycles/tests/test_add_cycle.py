@@ -17,12 +17,13 @@ class AddCycleTestCase(unittest.TestCase):
         # Pour simuler un doublon
         self.existing_date = (datetime.today() - timedelta(days=10)).strftime("%Y-%m-%d")  
 
+
     @patch('cycles.views.Cycle')
     def test_add_valid_cycle(self, mock_cycle):
         """
         Teste l'ajout d'un cycle valide.
         """
-        mock_cycle.objects.filter.return_value.exists.return_value = False  # Pas de doublon
+        mock_cycle.objects.filter.return_value.exists.return_value = False
         mock_instance = MagicMock()
         mock_instance.start_date = datetime.strptime(self.valid_date, "%Y-%m-%d").date()
         mock_instance.end_date = mock_instance.start_date + timedelta(days=28)
@@ -38,6 +39,7 @@ class AddCycleTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         self.assertIn("Cycle ajouté avec succès", response.json()["message"])
 
+
     @patch('cycles.views.Cycle.objects')
     def test_add_cycle_missing_date(self, mock_cycle_objects):
         """
@@ -45,12 +47,13 @@ class AddCycleTestCase(unittest.TestCase):
         """
         response = self.client.post(
             "/api/add_cycle/",
-            json.dumps({}),  # Pas de start_date fourni
+            json.dumps({}),
             content_type="application/json"
         )
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["error"], "La date de début est requise.")
+
 
     @patch('cycles.views.Cycle.objects')
     def test_add_cycle_invalid_date_format(self, mock_cycle_objects):
@@ -66,12 +69,13 @@ class AddCycleTestCase(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["error"], "La date fournie est invalide.")
 
+
     @patch('cycles.views.Cycle.objects')
     def test_add_cycle_duplicate_date(self, mock_cycle_objects):
         """
-        Teste l'ajout d'un cycle déjà existant (doublon).
+        Teste l'ajout d'un cycle déjà existant.
         """
-        mock_cycle_objects.filter.return_value.exists.return_value = True  # Simule un doublon
+        mock_cycle_objects.filter.return_value.exists.return_value = True
 
         response = self.client.post(
             "/api/add_cycle/",
@@ -81,6 +85,7 @@ class AddCycleTestCase(unittest.TestCase):
 
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json()["error"], "Un cycle pour cette date existe déjà.")
+
 
     @patch('cycles.views.Cycle.objects')
     def test_add_cycle_internal_server_error(self, mock_cycle_objects):
