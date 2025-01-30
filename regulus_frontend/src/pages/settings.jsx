@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import DeleteCycles from '../components/DeleteCycles';
+import DeleteCycles from '../components/ManageCycles';
 import logo from '../assets/logo.png';
 
 

@@ -125,3 +125,31 @@ def delete_cycle(request, cycle_id):
             return JsonResponse({'error': f"Erreur serveur : {str(e)}"}, status=500)
 
     return JsonResponse({'error': 'Méthode non autorisée'}, status=405)
+
+def get_cycles_data(request):
+    """
+    Retourne la durée entre chaque début de cycle (intervalle entre règles).
+    """
+    try:
+        cycles = Cycle.objects.all().order_by('start_date')
+
+        # Vérifier s'il y a au moins 2 cycles pour calculer l'intervalle
+        if len(cycles) < 2:
+            return JsonResponse({"cycles": []}, safe=False, status=200)
+
+        data = []
+        previous_cycle = None
+
+        for cycle in cycles:
+            if previous_cycle:
+                days_between = (cycle.start_date - previous_cycle.start_date).days
+                data.append({
+                    "start_date": cycle.start_date.strftime("%Y-%m-%d"),
+                    "days_between": days_between
+                })
+            previous_cycle = cycle  # Mise à jour du cycle précédent
+
+        return JsonResponse({"cycles": data}, safe=False, status=200)
+    
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

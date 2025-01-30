@@ -23,7 +23,7 @@ function HomePage() {
         <div className="flex flex-row m-4 justify-center">
             <nav>
                 <ul className="flex space-x-4 font-medium">
-                    <li><Link to="/graph" className=" rounded-lg p-2  bg-pink-1 shadow-pink-2 shadow-md">Graphiques</Link></li>
+                    <li><Link to="/graph" className=" rounded-lg p-2 bg-pink-1 shadow-pink-2 shadow-md">Graphiques</Link></li>
                     <li><Link to="/settings" className=" rounded-lg p-2 bg-pink-1 shadow-pink-2 shadow-md">Paramètres</Link></li>
                 </ul>
             </nav>
