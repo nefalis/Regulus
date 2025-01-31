@@ -24,8 +24,7 @@ function GraphPage() {
             </nav>
         </div>
 
-        <div>
-            <h1 className="text-2xl font-bold text-center">Suivi du Cycle Menstruel</h1>
+        <div className=''>
             <CycleChart />
         </div>
 

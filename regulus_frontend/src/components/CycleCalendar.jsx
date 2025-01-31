@@ -6,33 +6,37 @@ function CycleCalendar({ cycles }) {
     // Fonction pour vérifier si une date est une date de règles
     const isCycleDay = (date) => {
         if (!Array.isArray(cycles) || cycles.length === 0) return false;
-    
-        const dateString = date.toISOString().split("T")[0];
-    
+
+        // Convertir la date du calendrier en format YYYY-MM-DD
+        const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
         const found = cycles.some(cycle => {
-            const start = new Date(cycle.start_date).toISOString().split("T")[0];
-            const end = cycle.end_date ? new Date(cycle.end_date).toISOString().split("T")[0] : start;
-    
+            const start = cycle.start_date; // Déjà au format YYYY-MM-DD
+            const end = cycle.end_date || start; // Déjà au format YYYY-MM-DD
+
             return dateString >= start && dateString <= end;
         });
         return found;
     };
+
     // Fonction pour formater les dates que l'on surligne
     const tileClassName = ({ date }) => {
         return isCycleDay(date) ? "highlighted" : "";
     };
 
     return (
-        <div className="cycle-calendar">
-            <h2 className="font-semibold text-lg">Calendrier des cycles</h2>
-            <Calendar
-                tileClassName={tileClassName}
-                tileContent={({ date, view }) =>
-                    view === "month" && isCycleDay(date) ? (
-                        <div className="circle-highlight"></div>
-                    ) : null
-                }
-            />
+        <div className="cycle-calendar flex flex-col items-center w-full">
+            <h2 className="font-semibold text-lg text-center mb-4">Calendrier des cycles</h2>
+            <div className="w-full flex justify-center">
+                <Calendar
+                    tileClassName={tileClassName}
+                    tileContent={({ date, view }) =>
+                        view === "month" && isCycleDay(date) ? (
+                            <div className="circle-highlight"></div>
+                        ) : null
+                    }
+                />
+            </div>
         </div>
     );
 }

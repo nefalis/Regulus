@@ -29,26 +29,23 @@ function AddCycle() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        const formattedStartDate = new Date(inputDate).toISOString().split('T')[0]; // Convertit la date en format ISO (sans heure)
+    
+        // Extraire la date au format YYYY-MM-DD directement depuis l'input
+        const formattedStartDate = inputDate; // inputDate est déjà au format YYYY-MM-DD
         const cycleData = { start_date: formattedStartDate };
+    
         if (endDate) {
-            const formattedEndDate = new Date(endDate).toISOString().split('T')[0];
+            const formattedEndDate = endDate; // endDate est déjà au format YYYY-MM-DD
             cycleData.end_date = formattedEndDate;
         }
-
+    
         axios
             .post("http://localhost:8000/api/add_cycle/", cycleData)
             .then((response) => {
                 setSuccessMessage("Cycle ajouté avec succès !");
                 setErrorMessage("");
                 setInputDate("");
-                // Réinitialiser la date de fin
-                setEndDate("");  
-
-                console.log("Cycle ajouté :", response.data);
-                
-                // Mettre à jour la liste des cycles
+                setEndDate("");
                 fetchCycleData();
             })
             .catch((error) => {

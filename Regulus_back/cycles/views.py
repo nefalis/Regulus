@@ -5,6 +5,7 @@ from rest_framework import viewsets
 from .serializers import CycleSerializer
 from django.http import JsonResponse
 from datetime import datetime, timedelta, date
+import pytz
 
 
 class CycleViewSet(viewsets.ModelViewSet):
@@ -41,10 +42,20 @@ def get_remaining_days(request):
         if not cycles.exists():
             average_cycle_length = 28
         else:
-            average_cycle_length = sum(
-                (cycle.end_date - cycle.start_date).days 
-                for cycle in cycles if cycle.end_date
-            ) / max(len([c for c in cycles if c.end_date]), 1)
+            # Calculer la durée entre les débuts des cycles successifs
+            cycle_durations = []
+            previous_cycle = None
+            for cycle in cycles:
+                if previous_cycle:
+                    duration = (cycle.start_date - previous_cycle.start_date).days
+                    cycle_durations.append(duration)
+                previous_cycle = cycle
+
+            # Calculer la moyenne des durées
+            if cycle_durations:
+                average_cycle_length = sum(cycle_durations) / len(cycle_durations)
+            else:
+                average_cycle_length = 28
 
         # Calcul des jours restants
         next_cycle_date = start_date + timedelta(days=average_cycle_length)
@@ -62,12 +73,8 @@ def get_remaining_days(request):
 
 @csrf_exempt
 def add_cycle(request):
-    """
-    Ajoute un nouveau cycle menstruel à la base de données.
-    """
     if request.method == 'POST':
         try:
-            # Charger les données JSON envoyées par le frontend
             data = json.loads(request.body)
             start_date_str = data.get('start_date')
             end_date_str = data.get('end_date')
@@ -75,20 +82,17 @@ def add_cycle(request):
             if not start_date_str:
                 return JsonResponse({'error': 'La date de début est requise.'}, status=400)
 
-            # Convertir la date en objet datetime
+            # Convertir la date en objet datetime en UTC
             start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date()
 
-            # Si aucune date de fin n'est fournie, définir une date de fin par défaut (7 jours après le début)
             if not end_date_str:
                 end_date = start_date + timedelta(days=7)
             else:
                 end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date()
 
-            # Vérifier si un cycle existe déjà pour cette date
             if Cycle.objects.filter(start_date=start_date).exists():
                 return JsonResponse({'error': 'Un cycle pour cette date existe déjà.'}, status=400)
 
-            # Créer un nouveau cycle
             cycle = Cycle(start_date=start_date, end_date=end_date)
             cycle.save()
 
@@ -126,6 +130,7 @@ def delete_cycle(request, cycle_id):
 
     return JsonResponse({'error': 'Méthode non autorisée'}, status=405)
 
+
 def get_cycles_data(request):
     """
     Retourne la durée entre chaque début de cycle (intervalle entre règles).
@@ -147,7 +152,7 @@ def get_cycles_data(request):
                     "start_date": cycle.start_date.strftime("%Y-%m-%d"),
                     "days_between": days_between
                 })
-            previous_cycle = cycle  # Mise à jour du cycle précédent
+            previous_cycle = cycle
 
         return JsonResponse({"cycles": data}, safe=False, status=200)
     
