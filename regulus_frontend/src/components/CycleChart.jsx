@@ -23,7 +23,7 @@ function CycleChart() {
                 // Calculer la moyenne des cycles
                 const averageCycle = cycleDurations.length > 0 
                     ? cycleDurations.reduce((sum, val) => sum + val, 0) / cycleDurations.length 
-                    : 28; // Valeur par défaut si aucune donnée
+                    : 28;
                 
                 // Créer un tableau de la moyenne (même valeur pour chaque point)
                 const averageLine = Array(labels.length).fill(averageCycle);
@@ -45,14 +45,14 @@ function CycleChart() {
                             label: `Moyenne des cycles (${averageCycle.toFixed(1)} jours)`,
                             data: averageLine,
                             borderColor: "#d367d3",
-                            borderDash: [10, 5], // Ligne en pointillé
+                            borderDash: [10, 5],
                             tension: 0.2,
                         },
                         {
                             label: "Cycle standard de 28 jours",
                             data: fixed28DaysLine,
                             borderColor: "#6e67d3",
-                            borderDash: [5, 5], // Ligne en pointillé
+                            borderDash: [5, 5],
                             tension: 0.2,
                         },
                     ],
@@ -63,7 +63,6 @@ function CycleChart() {
             });
     }, []);
 
-    
     // Options pour personnaliser les axes
     const options = {
         responsive: true,

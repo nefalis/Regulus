@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+
 function RemainingDays({ lastPeriodDate, cycleLength }) {
     const [daysRemaining, setDaysRemaining] = useState(null);
     const [localCycleLength, setCycleLength] = useState(28);

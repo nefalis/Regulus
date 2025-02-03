@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Cycle(models.Model):
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)

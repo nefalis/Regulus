@@ -24,10 +24,11 @@ function SettingsPage() {
                     </ul>
                 </nav>
             </div>
+
             <div className='m-6 rounded-lg p-2 bg-pink-1 shadow-pink-2 shadow-md'>
                 <DeleteCycles />  
             </div>
-            
+
         </div>
     );
 }

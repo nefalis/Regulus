@@ -3,7 +3,6 @@ from rest_framework.routers import DefaultRouter
 from cycles.views import CycleViewSet, get_remaining_days, add_cycle, delete_cycle, get_cycles_data
 
 
-
 router = DefaultRouter()
 router.register(r'cycles', CycleViewSet)
 

@@ -2,6 +2,7 @@ import React from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
+
 function CycleCalendar({ cycles }) {
     // Fonction pour vérifier si une date est une date de règles
     const isCycleDay = (date) => {
@@ -11,8 +12,8 @@ function CycleCalendar({ cycles }) {
         const dateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
         const found = cycles.some(cycle => {
-            const start = cycle.start_date; // Déjà au format YYYY-MM-DD
-            const end = cycle.end_date || start; // Déjà au format YYYY-MM-DD
+            const start = cycle.start_date;
+            const end = cycle.end_date || start;
 
             return dateString >= start && dateString <= end;
         });

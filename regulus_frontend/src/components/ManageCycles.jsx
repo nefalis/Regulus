@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+
 function DeleteCycles() {
     const [cycles, setCycles] = useState([]);
     const [years, setYears] = useState([]);
-    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Année actuelle par défaut
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
     // Récupérer les cycles depuis l'API
     useEffect(() => {
@@ -13,7 +14,7 @@ function DeleteCycles() {
                 const sortedCycles = response.data.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
                 setCycles(sortedCycles);
 
-                // 🔹 Extraire les années uniques pour le filtre
+                //  Extraire les années uniques pour le filtre
                 const uniqueYears = [...new Set(sortedCycles.map(cycle => new Date(cycle.start_date).getFullYear()))];
                 setYears(uniqueYears);
             })
@@ -22,14 +23,15 @@ function DeleteCycles() {
             });
     }, []);
 
-    // 🔹 Filtrer les cycles selon l'année sélectionnée
+    //  Filtrer les cycles selon l'année sélectionnée
     const filteredCycles = cycles.filter(cycle => new Date(cycle.start_date).getFullYear() === selectedYear);
 
     // Supprimer un cycle
     const handleDeleteCycle = (cycleId) => {
         axios.delete(`http://localhost:8000/api/cycles/${cycleId}/`)
             .then(() => {
-                setCycles(cycles.filter(cycle => cycle.id !== cycleId)); // Mettre à jour la liste des cycles
+                // Mettre à jour la liste des cycles
+                setCycles(cycles.filter(cycle => cycle.id !== cycleId)); 
                 setSuccessMessage('Cycle supprimé avec succès.');
                 setErrorMessage('');
             })
@@ -46,7 +48,6 @@ function DeleteCycles() {
         <div>
             <h2 className="text-xl font-bold mb-3">Mes Cycles Enregistrés</h2>
 
-            {/* 🔹 Sélecteur d'année */}
             <div className="mb-4">
                 <label className="mr-3 font-bold">Filtrer par année :</label>
                 <select 
@@ -60,7 +61,7 @@ function DeleteCycles() {
                 </select>
             </div>
 
-            {/* 🔹 Liste des cycles filtrés */}
+            {/* Liste des cycles filtrés */}
             {filteredCycles.length === 0 ? (
                 <p>Aucun cycle enregistré pour cette année.</p>
             ) : (
@@ -78,7 +79,7 @@ function DeleteCycles() {
                 </ul>
             )}
 
-            {/* 🔹 Messages d'alerte */}
+            {/* Messages d'alerte */}
             {successMessage && <p className="text-green-500 mt-3">{successMessage}</p>}
             {errorMessage && <p className="text-red-500 mt-3">{errorMessage}</p>}
         </div>

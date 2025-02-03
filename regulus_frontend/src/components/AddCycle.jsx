@@ -21,7 +21,6 @@ function AddCycle() {
             });
     };
 
-
     // Charger les cycles au démarrage
     useEffect(() => {
         fetchCycleData();
@@ -29,16 +28,16 @@ function AddCycle() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-    
+
         // Extraire la date au format YYYY-MM-DD directement depuis l'input
-        const formattedStartDate = inputDate; // inputDate est déjà au format YYYY-MM-DD
+        const formattedStartDate = inputDate;
         const cycleData = { start_date: formattedStartDate };
-    
+
         if (endDate) {
-            const formattedEndDate = endDate; // endDate est déjà au format YYYY-MM-DD
+            const formattedEndDate = endDate;
             cycleData.end_date = formattedEndDate;
         }
-    
+
         axios
             .post("http://localhost:8000/api/add_cycle/", cycleData)
             .then((response) => {

@@ -5,12 +5,12 @@ from rest_framework import viewsets
 from .serializers import CycleSerializer
 from django.http import JsonResponse
 from datetime import datetime, timedelta, date
-import pytz
 
 
 class CycleViewSet(viewsets.ModelViewSet):
     queryset = Cycle.objects.all()
     serializer_class = CycleSerializer
+
 
 def get_remaining_days(request):
     """
@@ -73,6 +73,9 @@ def get_remaining_days(request):
 
 @csrf_exempt
 def add_cycle(request):
+    """
+    Ajoute un nouveau cycle menstruel avec une date de début et une date de fin.
+    """
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -82,17 +85,19 @@ def add_cycle(request):
             if not start_date_str:
                 return JsonResponse({'error': 'La date de début est requise.'}, status=400)
 
-            # Convertir la date en objet datetime en UTC
+            # Convertir la date de début
             start_date = datetime.strptime(start_date_str, "%Y-%m-%d").date()
-
+            # Déterminer la date de fin
             if not end_date_str:
                 end_date = start_date + timedelta(days=7)
             else:
                 end_date = datetime.strptime(end_date_str, "%Y-%m-%d").date()
 
+            # Vérifier si un cycle existe déjà pour cette date
             if Cycle.objects.filter(start_date=start_date).exists():
                 return JsonResponse({'error': 'Un cycle pour cette date existe déjà.'}, status=400)
 
+            # Enregistrement du cycle dans la base de données
             cycle = Cycle(start_date=start_date, end_date=end_date)
             cycle.save()
 
@@ -113,6 +118,9 @@ def add_cycle(request):
 
 @csrf_exempt
 def delete_cycle(request, cycle_id):
+    """
+    Supprime un cycle menstruel en fonction de son ID.
+    """
     if request.method == 'DELETE':
         try:
             cycle = Cycle.objects.get(id=cycle_id)
@@ -145,6 +153,7 @@ def get_cycles_data(request):
         data = []
         previous_cycle = None
 
+        # Calcul de la durée entre chaque cycle
         for cycle in cycles:
             if previous_cycle:
                 days_between = (cycle.start_date - previous_cycle.start_date).days
@@ -155,6 +164,6 @@ def get_cycles_data(request):
             previous_cycle = cycle
 
         return JsonResponse({"cycles": data}, safe=False, status=200)
-    
+
     except Exception as e:
         return JsonResponse({"error": str(e)}, status=500)

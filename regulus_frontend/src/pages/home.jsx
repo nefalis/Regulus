@@ -1,13 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
 import logo from '../assets/logo.png';
 import RemainingDays from '../components/RemainingDays';
 import AddCycle from '../components/AddCycle';
 
 
 function HomePage() {
-    
     return (
     <div>
 
@@ -37,9 +35,7 @@ function HomePage() {
             <AddCycle/>
         </div>   
 
-
     </div>
-
     );
 }
 
