@@ -1,5 +1,6 @@
-# Regulus
+
 ![logo](./regulus_frontend/src/assets/logo.png)
+# Regulus
 
 Application qui permet aux utilisatrices de suivre leurs cycles menstruels, de prévoir leurs prochaines règles, et d’analyser la durée moyenne des cycles à travers un graphique interactif.
 
